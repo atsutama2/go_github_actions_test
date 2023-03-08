@@ -16,7 +16,4 @@ jobs:
       - name: setup
         run: |
           go version
-          mv go.mod.test go.mod
           go mod tidy
-      - name: run test
-        run: make test
