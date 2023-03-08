@@ -14,18 +14,18 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
-      - name: setup
-        run: |
-          go version
-          go mod tidy
-          go vet ./...
+      - name: Test
+        run: go test -v ./...
+        id: test
+        env:
+          GO_TEST_STATUS: ${{ job.status }}
       - name: Comment on pull request
         uses: actions/github-script@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            var body = "Test results:\n\n" + `${{ job.status }}` + "\n\n" + `${{ steps.comment.outputs.comment }}`;
+            var body = "Test results:\n\n" + process.env.GO_TEST_STATUS + "\n\n" + `${{ steps.comment.outputs.comment }}`;
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
