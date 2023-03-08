@@ -1,10 +1,5 @@
 name: Comment opening announce
-on:
-  pull_request:
-    branches:
-      - 'staging'
-    types:
-      - opened
+on: pull_request
 jobs:
   comment_opening_announce:
     runs-on: ubuntu-latest
