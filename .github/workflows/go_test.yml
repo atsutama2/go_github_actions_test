@@ -17,4 +17,5 @@ jobs:
         run: |
           go version
           go mod tidy
+          go vet ./...
           
