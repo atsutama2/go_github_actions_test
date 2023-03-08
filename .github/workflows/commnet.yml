@@ -1,0 +1,36 @@
+name: Comment opening announce
+on: pull_request
+jobs:
+  comment_opening_announce:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Set up opening announce
+        id: opening_announce
+        run: |
+          lf='\n'
+          message="@${{ github.event.pull_request.user.login }} さん、デプロイプルリクエストの作成ありがとうございます！ :tada:"
+          message+="${lf}${lf}ステージング環境へのデプロイは下記の手順で行ってください。"
+          message+="${lf}1. リリース予定の\`feature\`ブランチを\`release\`ブランチにマージします。"
+          message+="${lf}1. \`ready-for-build\`ラベルを付けます。"
+          message+="${lf}1. \`github-actions\`ボットのプルリクエストに対するアクションを待ちます。"
+          message+="${lf}    - \`approve\`された場合、\`staging\`ブランチにマージします。"
+          message+="${lf}    - \`ready-for-build\`ラベルが剥がされた場合、原因を特定して手順2からやり直してください。"
+          message+="${lf}${lf}プルリクエストをマージすると、ステージング環境にデプロイが行われます。 :rocket:"
+          message+="${lf}\`github-actions\`ボットから\`approve\`された後にプルリクエストを更新した場合は、"
+          message+="${lf}\`ready-for-build\`ラベルを付ける手順からやり直してください。"
+          echo "message=${message}" >> $GITHUB_OUTPUT
+      - name: Comment opening announce
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const params = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: '${{ steps.opening_announce.outputs.message }}'
+            }
+            await github.rest.issues.createComment(params)
