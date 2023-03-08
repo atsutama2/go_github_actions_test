@@ -4,12 +4,18 @@
 name: go_test
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - labeled
+    branches: [ "main" ]
+
+#on:
+#  pull_request:
+#    types:
+#      - opened
+#      - synchronize
+#      - reopened
+#      - labeled
 
 jobs:
   test:
