@@ -16,6 +16,7 @@ func main() {
 
 	fmt.Println("Debugging")
 	fmt.Println("0")
+	fmt.Println("1")
 
 	http.ListenAndServe(":8080", r)
 }
