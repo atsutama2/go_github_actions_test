@@ -1,4 +1,13 @@
-commentJson='{"body":"Hello world!"}'
+#!/bin/bash
+
+# テストを実行してカバレッジ情報を取得する
+go test -coverprofile=coverage.out ./...
+
+# カバレッジ情報をテキスト形式で取得する
+go tool cover -func=coverage.out | awk -F':' '/.go/{print $1}' > all_files.txt
+go tool cover -func=coverage.out | awk '{print $3 "|" substr($1, 1, length($1)-1) "%"}' > all_coverage_report.txt
+
+# commentJson='{"body":"Hello world!"}'
 
 # PRのコメント一覧から既存のcommentを取得
 # comment_id=$(curl \

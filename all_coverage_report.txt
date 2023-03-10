@@ -1,0 +1,2 @@
+100.0%|github.com/atsutama2/go_github_actions_test/service/hello.go:6%
+100.0%|total%
